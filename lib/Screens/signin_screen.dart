@@ -11,14 +11,16 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _usernameController = TextEditingController();// Text controller for username
-  TextEditingController _passwordController = TextEditingController();// Text controller for password
+  TextEditingController _usernameController =
+      TextEditingController(); // Text controller for username
+  TextEditingController _passwordController =
+      TextEditingController(); // Text controller for password
 
-Future<void> login(String username, String password) async {
+  Future<void> login(String username, String password) async {
     try {
       // Define the URL where you want to send the login request
       const String loginUrl =
-          'https://bspapp.sail-bhilaisteel.com/MES_MOB/APP/mesapp_login.jsp';
+          'https://bspapp.sail-bhilaisteel.com/MES_MOB/APP/mesappLogin.jsp';
 
       // Create a Map with the parameters
       final Map<String, String> formData = {
@@ -35,44 +37,99 @@ Future<void> login(String username, String password) async {
         //here it is written to run without CORS error
 
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded',
           "Access-Control-Allow-Origin": "*",
           "Access-Control-Allow-Methods": "POST,GET,OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type,Accept, X-Requested-With"
-          
+          "Access-Control-Allow-Headers":
+              "Content-Type,Accept, X-Requested-With"
         },
-        body: json.encode(formData), // Encode the Map as JSON
+        body: formData, // Encode the Map as JSON
       );
-
 
       // Check if the request was successful (status code 200)
       //edit this to know the name, status and login name
-      // try to implement the Token 
+      // try to implement the Token
+
+      // final response = await http.get(Uri.parse(loginUrl), headers: {
+      //   //HttpHeaders.authorizationHeader: 'Token $token',
+      //   HttpHeaders.contentTypeHeader: 'application/json',
+      // });
+      // var loginDetails = response.body;
+      // print(loginDetails);
+
+                final List<dynamic> responseData = json.decode(response.body);
+
+      // Accessing elements in the JSON response
+      final String name = responseData[0]['NAME'];
+      final String status = responseData[0]['STATUS'];
+      final String loginName = responseData[0]['LOGIN_NAME'];
+
       if (response.statusCode == 200) {
-        print("Login Success"); // Debug print for successful login
-        Navigator.pushNamed(context, '/homie');// Navigate to the home screen located at lib/Screens/homie.dart
+        print(response.body); // Debug print for the response body
+        if (status == "FAIL") {;
+          showDialog(
+            context: context, // Make sure you have a valid context
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Login Failed"),
+                content: Text("Invalid Userid or Password"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
+          return;
+        } else {
+          print("Login Success"); // Debug print for successful login
+          Navigator.pushNamed(context, '/homie');
+          // Navigate to the home screen located at lib/Screens/homie.dart
 
-        // Parse the JSON response
-        final List<dynamic> responseData = json.decode(response.body);
+          // Parse the JSON response
 
-        // Accessing elements in the JSON response
-        final String name = responseData[0]['NAME'];
-        final String status = responseData[0]['STATUS'];
-        final String loginName = responseData[0]['LOGIN_NAME'];
 
-        // Show a success dialog
+          // Show a success dialog
+          showDialog(
+            context: context, // Make sure you have a valid context
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text("Login Success"),
+                content: Text(
+                    "Name: $name\nStatus: $status\nLogin Name: $loginName"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      } else {
+        // If the request was not successful, print an error message
+        // and show an error dialog
+        //please write a message from the server here
+        //Add the message to Dialog box as content
+        //here it is written to run without CORS error
         showDialog(
           context: context, // Make sure you have a valid context
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Login Success"),
+              title: Text("Login Failed"),
               content:
-                  Text("Name: $name\nStatus: $status\nLogin Name: $loginName"),
+                  Text("Internal Server Error. Please try again later."),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
-                    
                   },
                   child: Text("OK"),
                 ),
@@ -80,20 +137,14 @@ Future<void> login(String username, String password) async {
             );
           },
         );
-      } else {
-        // If the request was not successful, print an error message
-        // and show an error dialog
-        //please write a message from the server here
-        //Add the message to Dialog box as content
-        //here it is written to run without CORS error
         print("Login Failed");
+        
       }
     } catch (e) {
       // Handle any exceptions that might occur during the login process
-      print(e);// Debug print for the exception
+      print(e); // Debug print for the exception
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,17 +171,18 @@ Future<void> login(String username, String password) async {
               children: [
                 // Logo
                 Image.asset(
-                  'assests/images/logo.png',  //located at assests/images/logo.png
+                  'assests/images/logo.png', //located at assests/images/logo.png
                   width: 100,
                   height: 100,
                 ),
                 SizedBox(height: 16.0),
-                Text("U R M", 
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
+                Text(
+                  "U R M",
+                  style: TextStyle(
+                    fontSize: 24.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
                 SizedBox(height: 16.0),
                 // Username input field
@@ -176,7 +228,7 @@ Future<void> login(String username, String password) async {
                     String username = _usernameController.text;
                     String password = _passwordController.text;
                     // Perform sign-in validation or authentication
-                    login( username,  password);
+                    login(username, password);
                   },
                   style: ElevatedButton.styleFrom(
                     primary: Colors.white,
