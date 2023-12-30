@@ -1,3 +1,7 @@
+// Note: Custom QR Scanner Overlay
+// NOT USED
+
+
 // import 'package:flutter/material.dart';
 
 // class CustomQRScannerOverlay extends StatelessWidget {

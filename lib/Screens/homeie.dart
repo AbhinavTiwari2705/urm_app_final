@@ -1,6 +1,16 @@
+// Importing necessary Flutter packages
 import 'package:flutter/material.dart';
 
+// Creating a stateless widget named 'Homie'
 class Homie extends StatelessWidget {
+  // List of button data, each represented by a Map
+  // Each Map contains the title, route and icon of the button
+  // You can add more buttons as needed
+  // The route is used to navigate to the specified screen
+  // The icon is used to display the icon on the button
+  // The title is used to display the title on the button
+  // The title is also used to display the screen title
+
   final List<Map<String, dynamic>> buttonList = [
     {
       'title': 'Qr Scanner',
@@ -24,22 +34,27 @@ class Homie extends StatelessWidget {
     // Add more buttons as needed
   ];
 
+  // Build method to create the UI
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // App bar with a title
       appBar: AppBar(
         title: Text('Home Screen'),
       ),
+      // Body of the app containing a centered column of buttons
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              // Loop through the buttonList to create buttons dynamically
               for (var button in buttonList)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton.icon(
                     onPressed: () {
+                      // Function to handle button tap and navigate to the specified route
                       handleButtonTap(context, button['route']);
                     },
                     icon: Icon(
@@ -55,8 +70,8 @@ class Homie extends StatelessWidget {
                       ),
                     ),
                     style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      minimumSize: Size(double.infinity, 50),
+                      primary: Colors.blue, // Button color
+                      minimumSize: Size(double.infinity, 50), // Button size
                     ),
                   ),
                 ),
@@ -67,6 +82,7 @@ class Homie extends StatelessWidget {
     );
   }
 
+  // Function to handle button tap and navigate to the specified route
   void handleButtonTap(BuildContext context, String route) {
     Navigator.pushNamed(context, route);
   }

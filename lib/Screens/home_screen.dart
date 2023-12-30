@@ -13,13 +13,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  MobileScannerController cameraController = MobileScannerController();
-  bool _screenOpened = false;
-  bool isScanned = false;
-  bool useFrontCamera = false;
-  bool useFlashlight = false;
+  MobileScannerController cameraController = MobileScannerController(); // MobileScannerController
+  bool _screenOpened = false; // Flag to check if the result screen is opened
+  bool isScanned = false;  // Flag to check if the QR code is scanned
+  bool useFrontCamera = false; // Flag to check if the front camera is used
+  bool useFlashlight = false;// Flag to check if the flashlight is used
 
-  void closeScanner() {
+  void closeScanner() {   // Function to close the scanner
     setState(() {
       isScanned = false;
     });
@@ -36,21 +36,21 @@ class _HomeState extends State<Home> {
             icon: ValueListenableBuilder(
               valueListenable: cameraController.torchState,
               builder: (context, state, child) {
-                switch (state as TorchState) {
+                switch (state as TorchState) {  // Switch case to toggle the torch
                   case TorchState.off:
-                    return const Icon(Icons.flash_off, color: Colors.grey);
+                    return const Icon(Icons.flash_off, color: Colors.grey); // Torch off
                   case TorchState.on:
-                    return const Icon(Icons.flash_on, color: Colors.yellow);
+                    return const Icon(Icons.flash_on, color: Colors.yellow); // Torch on
                 }
               },
             ),
-            iconSize: 32.0,
-            onPressed: () => cameraController.toggleTorch(),
+            iconSize: 32.0,   // Icon size
+            onPressed: () => cameraController.toggleTorch(),// Toggle torch
           ),
           IconButton(
             color: Colors.white,
             icon: ValueListenableBuilder(
-              valueListenable: cameraController.cameraFacingState,
+              valueListenable: cameraController.cameraFacingState, // Switch case to toggle the camera
               builder: (context, state, child) {
                 switch (state as CameraFacing) {
                   case CameraFacing.front:
@@ -97,17 +97,17 @@ class _HomeState extends State<Home> {
                 children: [
                   MobileScanner(
                     allowDuplicates: true,
-                    // useFrontCamera: cameraController.toggleTorch(),
+                    // useFrontCamera: cameraController.toggleTorch(),     //These functions are depricated in MobileScanner Module
                     // useFlashlight: useFlashlight,
                     onDetect: (barcode, args) {
                       if (!isScanned) {
                         setState(() {
                           isScanned = true;
-                          String code = barcode.rawValue ?? "---";
+                          String code = barcode.rawValue ?? "---";   // QR code value
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ResultScreen(
+                              builder: (context) => ResultScreen(   // Navigate to the result screen
                                 closeScreen: closeScanner,
                                 code: code,
                               ),
@@ -127,30 +127,7 @@ class _HomeState extends State<Home> {
                 ],
               ),
             ),
-            // Row(
-            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            //   children: [
-            //     Text('Front Camera'),
-            //     Switch(
-            //       value: useFrontCamera,
-            //       onChanged: (value) {
-            //         setState(() {
-            //           useFrontCamera = value;
-            //         });
-            //       },
-            //     ),
-            //     Text('Flashlight'),
-            //     Switch(
-            //       value: useFlashlight,
-            //       onChanged: (value) {
-            //         setState(() {
-            //           useFlashlight = value;
-            //         });
-            //       },
-            //     ),
-            //   ],
-            // ),
-Expanded(
+            Expanded(                   // Expanded widget to increase the space between the scanner and the button
               child: Container(
                 color: Color.fromARGB(255, 255, 255, 255),
                 child: Column(
@@ -181,7 +158,7 @@ Expanded(
                     ),
                     SizedBox(height: 20), // Increased space below the button
                     Text(
-                      "Made with ❤️ by C&IT Interns",
+                      "Made with ❤️ by C&IT Interns",    // Text below the button  :)
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,

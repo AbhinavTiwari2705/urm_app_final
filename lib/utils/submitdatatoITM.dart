@@ -1,5 +1,12 @@
 import 'package:http/http.dart' as http;
 
+// This is the function that sends the data to the ITM server
+// It is called from lib/Screens/manual.dart
+// It is called from lib/Screens/home_screen.dart
+
+
+
+
 final Uri apiUrl = Uri.parse(
     "https://bspapp.sail-bhilaisteel.com/MES_MOB/APP/bloomInfo.jsp");
 
@@ -14,7 +21,7 @@ Future<bool> sendDataToITM(
   print('Original data: $data');
 
   final Uri uriWithParams = apiUrl.replace(
-    queryParameters: data.map((key, value) => MapEntry(key, value.toString())),
+    queryParameters: data.map((key, value) => MapEntry(key, value.toString())), // this converts the data to string
   );
   print('Generated URI: $uriWithParams');
 

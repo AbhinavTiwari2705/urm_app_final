@@ -8,14 +8,6 @@ import 'package:urm_app/Screens/homeie.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  // try {
-  //   Response response = await post(
-  //     Uri.parse('https://bspapp.sail-bhilaisteel.com/MES_MOB/APP/mesapp_login.jsp'),
-  //     body: {
-  //       'Username': username,
-  //       'Password': password,
-  //     },
-  //   );
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -25,10 +17,13 @@ class MyApp extends StatelessWidget {
       ),
       home: const SignInScreen(),
       routes: {
-        '/homie': (context) => Homie(), // 
-        '/home': (context) => const Home(),
-        '/signin': (context) => const SignInScreen(),
-        '/manual': (context) =>  Manual(),
+        '/homie': (context) => Homie(), // Calling the home screen located at lib/Screens/homeie.dart
+        '/home': (context) => const Home(), // Calling the home screen located at lib/Screens/home_screen.dart
+        '/signin': (context) => const SignInScreen(),// Calling the signin screen located at lib/Screens/signin_screen.dart
+        '/manual': (context) =>  Manual(),// Calling the manual screen located at lib/Screens/manual.dart
+        // 'ITM': (context) => const ITM(), // Calling the home screen located at lib/Screens/home_screen.dart (FOR FUTURE USE)
+        // 'Bloom Report': (context) => const BloomReport(), // Calling the home screen located at lib/Screens/home_screen.dart (FOR FUTURE USE)
+        //'signup': (context) => const SignupScreen(), // Calling the signup screen located at lib/Screens/signup_screen.dart (FOR FUTURE USE)
       }
     );
   }

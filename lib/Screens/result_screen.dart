@@ -5,44 +5,51 @@ import 'dart:convert';
 import 'package:urm_app/widget/common_drawer.dart';
 import 'package:urm_app/utils/submitdatatoITM.dart';
 
+
+//
 class ResultScreen extends StatelessWidget {
+
+  //
   final String code;
-  final Function() closeScreen;
-  String heatNo = '1';
-  String section = '2';
-  String strand = '3';
-  String date = '4';
-  String time = '5';
-  String grade = '6';
+  final Function() closeScreen; // Function to close the screen
+  String heatNo = '1';        // defining Heat number
+  String section = '2';       // defining section
+  String strand = '3';        // defining strand
+  String date = '4';          // defining date
+  String time = '5';          // defining time
+  String grade = '6';         // defining grade
 
   Map<String, String> convertToMap(String input) {
+    // using this function to convert the scanned data into a map
+    // Replace all occurrences of "GRADE-" with "GRADE_" to avoid issues with RegExp
+
     String outputCode = input.replaceAllMapped(
       RegExp(r'GRADE-([^;]+)'),
-      (Match match) => 'GRADE-${match[1]?.replaceAll('-', '_') ?? ""}',
+      (Match match) => 'GRADE-${match[1]?.replaceAll('-', '_') ?? ""}', // Replace "-" with "_"
     );
 
-    List<String> pairs = outputCode.split(';');
-    Map<String, String> resultMap = {};
+    List<String> pairs = outputCode.split(';'); // Split the string by ";"
+    Map<String, String> resultMap = {}; // Create an empty map
 
     for (String pair in pairs) {
-      List<String> keyValue = pair.split('-');
+      List<String> keyValue = pair.split('-'); // Split each pair by "-"
       if (keyValue.length == 2) {
-        String key = keyValue[0].trim();
-        String value = keyValue[1].trim();
+        String key = keyValue[0].trim();   // Trim the key
+        String value = keyValue[1].trim();  // Trim the value
         resultMap[key] = value;
 
-        // Debug print for each key-value pair
+        // Debug print for each key-value pair remove this in production
         print('Parsed: $key - $value');
       }
     }
 
-    print('Result Map: $resultMap');
+    print('Result Map: $resultMap');  // Debug print for the result map remove this in production
 
-    heatNo = resultMap["HEAT NO"] ?? "N/A";
-    section = resultMap["SECTION"] ?? "N/A";
-    strand = resultMap["STRAND"] ?? "N/A";
-    date = resultMap["DATE"] ?? "N/A";
-    time = resultMap["TIME"] ?? "N/A";
+    heatNo = resultMap["HEAT NO"] ?? "N/A";   // Extracting the heat number
+    section = resultMap["SECTION"] ?? "N/A";// Extracting the section
+    strand = resultMap["STRAND"] ?? "N/A";// Extracting the strand
+    date = resultMap["DATE"] ?? "N/A";// Extracting the date
+    time = resultMap["TIME"] ?? "N/A";// Extracting the time
 
     // Extracting the grade value by combining "GRADE-" with the actual grade value
     grade = resultMap.entries
@@ -50,38 +57,40 @@ class ResultScreen extends StatelessWidget {
             orElse: () => MapEntry("GRADE", "N/A"))
         .value;
 
-    print(code);
+    print(code);  // Debug print for the scanned code remove this in production
 
     return resultMap;
   }
-
+    // This Function is also present at lib/utils/submit_data.dart
   Future<void> submitData() async {
     final Uri apiUrl = Uri.parse(
-        "https://bspapp.sail-bhilaisteel.com/MES_MOB/APP/BloomReceipt.jsp");
+        "https://bspapp.sail-bhilaisteel.com/MES_MOB/APP/BloomReceipt.jsp");      // API URL
 
     final Map<String, dynamic> data = {
       // 'code': code,
-      'heatNo': heatNo,
-      'section': section,
-      'strand': strand,
-      'grade': grade,
+      'heatNo': heatNo,// Heat number
+      'section': section,// Section
+      'strand': strand,// Strand
+      'grade': grade,// Grade
     };
-    print('Original data: $data');
+    print('Original data: $data'); // Debug print for the original data remove this in production
 
     // Add the data to the URL+----a
     final Uri uriWithParams = apiUrl.replace(
       queryParameters:
           data.map((key, value) => MapEntry(key, value.toString())),
     );
-    print('Generated URI: $uriWithParams');
+    print('Generated URI: $uriWithParams');// Debug print for the generated URI remove this in production
 
     try {
       final http.Response response = await http.post(
         uriWithParams,
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json'},// Setting the content type to JSON
       );
 
       // Process the response here
+      // You can also use the response to check if the data was submitted successfully
+      
       print("Response status: ${response.statusCode}");
       print("Response body: ${response.body}");
 
@@ -97,11 +106,17 @@ class ResultScreen extends StatelessWidget {
       print("Error: $e");
     }
   }
-
+  //
   DataTable buildDataTable(Map<String, String> data) {
-    List<DataRow> rows = [];
 
-    data.forEach((key, value) {
+    // This function is used to build the data table
+
+
+    List<DataRow> rows = []; // List of data rows
+
+    //
+
+    data.forEach((key, value) {// Loop through the map to create data rows
       rows.add(
         DataRow(
           cells: [
@@ -112,7 +127,7 @@ class ResultScreen extends StatelessWidget {
       );
     });
 
-    return DataTable(
+    return DataTable(// Return the data table
       columns: [
         DataColumn(label: Text('Key')),
         DataColumn(label: Text('Value')),
@@ -123,7 +138,8 @@ class ResultScreen extends StatelessWidget {
 
   ResultScreen({
     Key? key,
-    required this.closeScreen,
+    
+    required this.closeScreen,   
     required this.code,
     this.heatNo = '1',
     this.section = '2',

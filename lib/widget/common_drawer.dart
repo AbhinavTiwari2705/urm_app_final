@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+
+// This is a common drawer for all screens
+
 class CommonDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

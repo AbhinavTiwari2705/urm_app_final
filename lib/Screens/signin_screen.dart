@@ -11,8 +11,8 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();// Text controller for username
+  TextEditingController _passwordController = TextEditingController();// Text controller for password
 
 Future<void> login(String username, String password) async {
     try {
@@ -29,6 +29,11 @@ Future<void> login(String username, String password) async {
       // Make a POST request to the login URL with the JSON-encoded payload
       final http.Response response = await http.post(
         Uri.parse(loginUrl),
+
+        // Set the request headers
+        // Edit this part as per your requirements
+        //here it is written to run without CORS error
+
         headers: {
           'Content-Type': 'application/json',
           "Access-Control-Allow-Origin": "*",
@@ -36,14 +41,16 @@ Future<void> login(String username, String password) async {
           "Access-Control-Allow-Headers": "Content-Type,Accept, X-Requested-With"
           
         },
-        body: json.encode(formData),
+        body: json.encode(formData), // Encode the Map as JSON
       );
 
 
       // Check if the request was successful (status code 200)
+      //edit this to know the name, status and login name
+      // try to implement the Token 
       if (response.statusCode == 200) {
-        print("Login Success");
-        Navigator.pushNamed(context, '/homie');
+        print("Login Success"); // Debug print for successful login
+        Navigator.pushNamed(context, '/homie');// Navigate to the home screen located at lib/Screens/homie.dart
 
         // Parse the JSON response
         final List<dynamic> responseData = json.decode(response.body);
@@ -75,11 +82,15 @@ Future<void> login(String username, String password) async {
         );
       } else {
         // If the request was not successful, print an error message
+        // and show an error dialog
+        //please write a message from the server here
+        //Add the message to Dialog box as content
+        //here it is written to run without CORS error
         print("Login Failed");
       }
     } catch (e) {
       // Handle any exceptions that might occur during the login process
-      print(e);
+      print(e);// Debug print for the exception
     }
   }
 
@@ -109,7 +120,7 @@ Future<void> login(String username, String password) async {
               children: [
                 // Logo
                 Image.asset(
-                  'assests/images/logo.png',
+                  'assests/images/logo.png',  //located at assests/images/logo.png
                   width: 100,
                   height: 100,
                 ),

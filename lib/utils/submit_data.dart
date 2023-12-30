@@ -1,3 +1,8 @@
+// This is the function that sends the data to the server
+// It is called from lib/Screens/manual.dart
+// It is called from lib/Screens/home_screen.dart
+
+
 import 'package:http/http.dart' as http;
 
 final Uri apiUrl = Uri.parse(

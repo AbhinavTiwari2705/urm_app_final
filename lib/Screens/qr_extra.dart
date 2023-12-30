@@ -1,3 +1,12 @@
+// This is a Extra Qr Scanner Screen made in case for implementing Google ML Kit to auto focus the camera and scan the qr code.
+// This is not used in the app.
+// feel free to use this code for your own purpose.
+
+
+
+
+
+
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
